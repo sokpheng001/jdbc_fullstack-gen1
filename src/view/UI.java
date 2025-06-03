@@ -29,7 +29,8 @@ public class UI {
             System.out.print("[+] Insert option: ");
             switch (new Scanner(System.in).nextInt()){
                 case 1->{
-                    System.out.println(controller.getAllUsers());
+                    controller.getAllUsers()
+                            .forEach(System.out::println);
                 }
                 case 2->{
                     System.out.println(
