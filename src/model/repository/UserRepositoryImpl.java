@@ -152,4 +152,28 @@ public class UserRepositoryImpl implements Repository<User, Integer> {
        }
         return null;
     }
+    public User findByUserId(Integer id){
+        try(Connection con = DatabaseConfigure.getDatabaseConnection()){
+            String sql = """
+                    SELECT * FROM users
+                    WHERE id = ?
+                    """;
+            PreparedStatement pre = con.prepareStatement(sql);
+            pre.setInt(1, id);
+            ResultSet resultSet = pre.executeQuery();
+            User user = new User();
+            while (resultSet.next()){
+                user.setId(resultSet.getInt("id"));
+                user.setUuid(resultSet.getString("uuid"));
+                user.setUserName(resultSet.getString("user_name"));
+                user.setEmail(resultSet.getString("email"));
+                user.setPassword(resultSet.getString("password"));
+                user.setIsDeleted(resultSet.getBoolean("is_deleted"));
+            }
+            return user;
+        }catch (Exception exception){
+            System.err.println("ERROR during find user by id :" + exception.getMessage());
+        }
+        return null;
+    }
 }

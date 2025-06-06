@@ -34,7 +34,7 @@ public class UI {
                 case 1->{
                     List<UserResponseDto>  userResponseDtoList = controller.getAllUsers();
                     Collections.reverse(userResponseDtoList);
-                    userResponseDtoList.forEach(System.out::println);
+                    TableUI.getTableUI(userResponseDtoList);
                 }
                 case 2->{
                     System.out.print("[+] User name: ");
