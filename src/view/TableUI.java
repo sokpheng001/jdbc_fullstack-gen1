@@ -1,5 +1,7 @@
 package view;
 
+
+import model.dto.PostResponseDto;
 import model.dto.UserResponseDto;
 import org.nocrala.tools.texttablefmt.BorderStyle;
 import org.nocrala.tools.texttablefmt.CellStyle;
@@ -8,22 +10,37 @@ import org.nocrala.tools.texttablefmt.Table;
 
 import java.util.List;
 
-public class TableUI {
-    private static final CellStyle CENTER = new CellStyle(CellStyle.HorizontalAlign.center);
-    public static void getTableUI(List<UserResponseDto> userResponseDtos){
-        Table table = new Table(4, BorderStyle.UNICODE_BOX_DOUBLE_BORDER
-        , ShownBorders.ALL);
-        String columNames[] = {"UUID","USERNAME","EMAIL","IS_DELETED"};
-        for(String col: columNames){
-            table.addCell(col, CENTER);
+public class TableUI<T> {
+    private Table table;
+    private String [] columnNames;
+    private final CellStyle center = new CellStyle(CellStyle.HorizontalAlign.center);
+    public void getTableDisplay(List<T> tList){
+        if(tList.getFirst() instanceof UserResponseDto){
+            table = new Table(4, BorderStyle.UNICODE_BOX_DOUBLE_BORDER,
+                    ShownBorders.ALL);
+            columnNames= new String[] {"UUID","USERNAME","EMAIL","IS_DELETED"};
         }
-//        table.setColumnWidth(0,20,25);
-        //
-        for(UserResponseDto user: userResponseDtos){
-            table.addCell(user.uuid(),CENTER);
-            table.addCell(user.userName(), CENTER);
-            table.addCell(user.email(),CENTER);
-            table.addCell(user.isDeleted().toString(),CENTER);
+        if(tList.getFirst() instanceof PostResponseDto){
+            table = new Table(4, BorderStyle.UNICODE_BOX_DOUBLE_BORDER,
+                    ShownBorders.ALL);
+            columnNames= new String[] {"UUID"};
+        }
+        for(String column: columnNames){
+            table.addCell(column,center);
+        }
+        for(T t: tList){
+            if(t instanceof UserResponseDto){
+                table.addCell(((UserResponseDto) t).uuid(),center);
+                table.addCell(((UserResponseDto )t).userName(),center);
+                table.addCell(((UserResponseDto )t).email(),center);
+                table.addCell(((UserResponseDto )t).isDeleted().toString(),center);
+            }
+            if(t instanceof PostResponseDto){
+//                table.addCell(((PostResponseDto)t).uuid(), center);;
+            }
+        }
+        for(int i =0;i< columnNames.length;i++){
+            table.setColumnWidth(i, 40,45);
         }
         System.out.println(table.render());
     }
